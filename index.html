@@ -651,33 +651,7 @@
       }
     });
 
-    // Отправка формы обратной связи (чтобы не перезагружать страницу)
-    async function sendForm(event) {
-      event.preventDefault();
-      const form = event.target;
-      const data = new FormData(form);
 
-      try {
-        const response = await fetch(form.action, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json'
-          },
-          body: data,
-        });
-
-        if (response.ok) {
-          alert('Спасибо! Ваше сообщение отправлено.');
-          form.reset();
-        } else {
-          alert('Ошибка при отправке. Попробуйте позже.');
-        }
-      } catch (error) {
-        alert('Ошибка сети. Попробуйте позже.');
-      }
-
-      return false; // чтобы не перезагружать страницу
-    }
 
     // Голосование
     const voteForm = document.getElementById('voteForm');
