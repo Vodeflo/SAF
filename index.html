@@ -13,52 +13,49 @@
       overflow-x: hidden;
     }
 
-header {
-  padding: 60px 20px;
-  text-align: center;
-  background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
-  animation: fadeIn 1.2s ease-out;
-  box-shadow: 0 4px 20px rgba(143, 148, 251, 0.5); /* лёгкая тень */
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-}
+    header {
+      padding: 60px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+      animation: fadeIn 1.2s ease-out;
+      box-shadow: 0 4px 20px rgba(143, 148, 251, 0.5);
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
 
-header::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15), transparent 70%);
-  animation: pulse 6s ease-in-out infinite;
-  pointer-events: none;
-  border-radius: 50%;
-  filter: blur(60px);
-  mix-blend-mode: screen;
-  z-index: 0;
-}
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15), transparent 70%);
+      animation: pulse 6s ease-in-out infinite;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(60px);
+      mix-blend-mode: screen;
+      z-index: 0;
+    }
 
-header h1, header p {
-  position: relative;
-  z-index: 1;
-}
+    header h1, header p {
+      position: relative;
+      z-index: 1;
+    }
 
-/* Анимация мягкого пульса */
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.3;
-  }
-}
-
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.3;
+      }
     }
 
     h1 {
@@ -84,17 +81,32 @@ header h1, header p {
       border-radius: 12px;
       box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
       margin: 20px 0;
+      transition: transform 0.2s ease-out;
+      transform-style: preserve-3d;
+      will-change: transform;
+      perspective: 1000px;
     }
 
     .links a {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 15px;
       color: #8f94fb;
       text-decoration: none;
-      margin-right: 15px;
       transition: 0.3s;
     }
 
     .links a:hover {
       text-decoration: underline;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      vertical-align: middle;
+      margin-right: 8px;
+      object-fit: cover;
     }
 
     @keyframes fadeIn {
@@ -119,7 +131,7 @@ header h1, header p {
   <div class="section" style="animation-delay: 0.5s;">
     <h2>О игре</h2>
     <p>
-      SAF - Это 2д пиксельная инди игра, где ты можешь делать все что захочешь! Хочешь построить домик? Добудь дерево скрафти доски и построй дом! Хочешь поплавать? Сядь на лодку и плыви куда захочешь! И это все в мультиплеере, веселись с друзьями!)
+      SAF - Это 2д пиксельная инди игра, где ты можешь делать все что захочешь! Хочешь построить домик? Добудь дерево скрафти доски и построй дом! Хочешь поплавать? Сядь на лодку и плыви куда захочешь! И это все в мультиплеере, веселись с друзьями! )
     </p>
     <img src="screenshot1.png" class="screenshot" alt="Скриншот 1" />
   </div>
@@ -138,43 +150,54 @@ header h1, header p {
   <div class="section" style="animation-delay: 1.5s;">
     <h2>Ссылки</h2>
     <div class="links">
-<style>
-  .links a {
-    display: inline-flex;
-    align-items: center;
-    margin-right: 15px;
-    color: #8f94fb;
-    text-decoration: none;
-    transition: 0.3s;
-  }
-  .links a:hover {
-    text-decoration: underline;
-  }
-  .icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    vertical-align: middle;
-    margin-right: 8px;
-    object-fit: cover;
-  }
-</style>
-
-<div class="links">
-  <a href="https://vodeflo.itch.io/saf" target="_blank" rel="noopener noreferrer">
-    <img src="Itchio.png" alt="Itch.io" class="icon" />
-    Скачать игру
-  </a>
-  <a href="https://discord.gg/QKehemHmP7" target="_blank" rel="noopener noreferrer">
-    <img src="Discord.png" alt="Discord" class="icon" />
-    Discord сервер
-  </a>
-  <a href="https://t.me/+KhWkvXTfP0JmNTc0" target="_blank" rel="noopener noreferrer">
-    <img src="Telegram.png" alt="Telegram" class="icon" />
-    Telegram канал
-  </a>
-</div>
+      <a href="https://vodeflo.itch.io/saf" target="_blank" rel="noopener noreferrer">
+        <img src="Itchio.png" alt="Itch.io" class="icon" />
+        Скачать игру
+      </a>
+      <a href="https://discord.gg/QKehemHmP7" target="_blank" rel="noopener noreferrer">
+        <img src="Discord.png" alt="Discord" class="icon" />
+        Discord сервер
+      </a>
+      <a href="https://t.me/+KhWkvXTfP0JmNTc0" target="_blank" rel="noopener noreferrer">
+        <img src="Telegram.png" alt="Telegram" class="icon" />
+        Telegram канал
+      </a>
     </div>
   </div>
+
+  <script>
+    // Выбираем все изображения с классом screenshot
+    const screenshots = document.querySelectorAll('img.screenshot');
+
+    screenshots.forEach(img => {
+      img.addEventListener('mousemove', (e) => {
+        const rect = img.getBoundingClientRect();
+        const x = e.clientX - rect.left; // координата X мыши внутри картинки
+        const y = e.clientY - rect.top;  // координата Y мыши внутри картинки
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        // Смещение мыши от центра в диапазоне [-1, 1]
+        const deltaX = (x - centerX) / centerX;
+        const deltaY = (y - centerY) / centerY;
+
+        const maxRotate = 15; // Максимальный угол поворота в градусах
+
+        // Вычисляем углы поворота
+        const rotateX = deltaY * maxRotate * -1; // Инвертируем по оси X
+        const rotateY = deltaX * maxRotate;
+
+        // Применяем CSS трансформацию
+        img.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+      });
+
+      img.addEventListener('mouseleave', () => {
+        // Возвращаем изображение в исходное состояние
+        img.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+      });
+    });
+  </script>
 </body>
 </html>
+
