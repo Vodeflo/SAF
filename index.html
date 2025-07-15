@@ -93,51 +93,12 @@
       margin-right: 15px;
       color: #8f94fb;
       text-decoration: none;
-      transition: 0.3s;
+      transition: transform 0.3s ease, text-decoration 0.3s ease;
     }
 
-.links a {
-  display: inline-flex;
-  align-items: center;
-  margin-right: 15px;
-  color: #8f94fb;
-  text-decoration: none;
-  transition: 0.4s;
-  position: relative;
-  padding: 6px 12px;
-  border-radius: 8px;
-  box-shadow: 0 0 8px #6e70f9cc;
-  overflow: hidden;
-}
-
-.links a:hover {
-  color: #d6d8ff;
-  box-shadow:
-    0 0 12px #8f94fb,
-    0 0 20px #8f94fb,
-    0 0 30px #8f94fb;
-  transform: scale(1.05);
-}
-
-.links a::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, #8f94fb55 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.4s;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.links a:hover::before {
-  opacity: 1;
-}
-
+    .links a:hover {
+      text-decoration: underline;
+      transform: scale(1.05);
     }
 
     .icon {
@@ -206,38 +167,35 @@
   </div>
 
   <script>
-    // Выбираем все изображения с классом screenshot
+    // Поворот скриншотов по курсору
     const screenshots = document.querySelectorAll('img.screenshot');
 
     screenshots.forEach(img => {
       img.addEventListener('mousemove', (e) => {
         const rect = img.getBoundingClientRect();
-        const x = e.clientX - rect.left; // координата X мыши внутри картинки
-        const y = e.clientY - rect.top;  // координата Y мыши внутри картинки
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
 
-        // Смещение мыши от центра в диапазоне [-1, 1]
         const deltaX = (x - centerX) / centerX;
         const deltaY = (y - centerY) / centerY;
 
-        const maxRotate = 15; // Максимальный угол поворота в градусах
+        const maxRotate = 15;
 
-        // Вычисляем углы поворота
-        const rotateX = deltaY * maxRotate * -1; // Инвертируем по оси X
+        const rotateX = deltaY * maxRotate * -1;
         const rotateY = deltaX * maxRotate;
 
-        // Применяем CSS трансформацию
         img.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
       });
 
       img.addEventListener('mouseleave', () => {
-        // Возвращаем изображение в исходное состояние
         img.style.transform = 'rotateX(0) rotateY(0) scale(1)';
       });
     });
   </script>
 </body>
 </html>
+
 
