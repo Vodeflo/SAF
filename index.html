@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SAF - Пиксельная мультиплеерная игра</title>
-  <meta name="description" content="SAF — это пиксельная 2D мультиплеерная игра про выживание на острове с друзьями! Строй, сражайся, путешествуй!">
-  <meta name="keywords" content="SAF, инди-игра, выживание, пиксельная игра, остров, мультиплеер, 2D, скачать">
-  <meta name="author" content="Vodeflo">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SAF - Multiplayer Game</title>
   <style>
-    * { box-sizing: border-box; }
     body, html {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
+      margin: 0; padding: 0;
+      height: 100%;
       background: #0e0e0e;
       color: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
       overflow-x: hidden;
+      position: relative;
     }
 
     /* Прелоадер */
@@ -28,180 +25,302 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      color: #8f94fb;
+      font-size: 2em;
+      letter-spacing: 0.15em;
       z-index: 9999;
+      user-select: none;
     }
-    #preloader img {
-      width: 100px;
-      height: 100px;
-      border-radius: 20px;
-      opacity: 0;
-      animation: popIn 1.5s ease forwards;
+    #preloader span {
+      border-right: 2px solid #8f94fb;
+      animation: typing 2s steps(14) infinite, blink 0.75s step-end infinite;
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
     }
-    @keyframes popIn {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+    @keyframes typing {
+      0% { width: 0 }
+      50%, 100% { width: 14ch }
+    }
+    @keyframes blink {
+      50% { border-color: transparent }
     }
 
     /* Звёздный фон */
     canvas#stars {
       position: fixed;
       top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
+      z-index: 0;
+      background: transparent;
+      display: block;
     }
 
+    /* Хедер */
     header {
-      text-align: center;
       padding: 60px 20px;
-      background: linear-gradient(135deg, #4e54c8, #8f94fb);
+      text-align: center;
+      background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+      box-shadow: 0 4px 20px rgba(143, 148, 251, 0.5);
       border-bottom-left-radius: 30px;
       border-bottom-right-radius: 30px;
-      box-shadow: 0 4px 20px rgba(143, 148, 251, 0.5);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      z-index: 10;
+      will-change: transform;
+      transition: transform 0.2s ease-out;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15), transparent 70%);
+      animation: pulse 6s ease-in-out infinite;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(60px);
+      mix-blend-mode: screen;
+      z-index: 0;
+    }
+    header h1, header p {
       position: relative;
       z-index: 1;
+      margin: 0;
     }
-    h1 { font-size: 2.8em; margin: 0; }
-    h2 { color: #8f94fb; }
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.3;
+      }
+    }
+    h1 {
+      font-size: 3em;
+      margin: 0;
+    }
 
+    /* Секции */
     .section {
-      max-width: 800px;
+      padding: 40px 20px;
+      max-width: 900px;
       margin: 40px auto;
-      padding: 20px;
       background: #1a1a1a;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-      position: relative;
-      z-index: 1;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+      will-change: transform;
+      transition: transform 0.3s ease-out;
+    }
+    .section:nth-child(odd) {
+      background-color: #121212;
+    }
+    img.screenshot {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+      margin: 20px 0;
+      display: block;
+      will-change: transform;
+      transition: transform 0.3s ease;
+    }
+    img.screenshot:hover {
+      transform: scale(1.05) rotate(1deg);
+      cursor: pointer;
     }
 
-    .faq-item {
-      margin-bottom: 15px;
+    /* Ссылки */
+    .links a {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 15px;
+      color: #8f94fb;
+      text-decoration: none;
+      transition: transform 0.2s ease, color 0.3s ease;
+      font-weight: 600;
+      font-size: 1.1em;
     }
-    .faq-item summary {
-      cursor: pointer;
-      font-weight: bold;
-      padding: 10px;
-      background: #2a2a2a;
+    .links a:hover {
+      text-decoration: underline;
+      color: #b3b7ff;
+      transform: scale(1.05);
+    }
+    .icon {
+      width: 24px;
+      height: 24px;
       border-radius: 6px;
-    }
-    .faq-item p {
-      margin: 10px 0 0;
-      padding: 10px;
-      background: #111;
-      border-left: 3px solid #8f94fb;
+      margin-right: 8px;
+      object-fit: cover;
+      filter: drop-shadow(0 0 2px rgba(143, 148, 251, 0.7));
     }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    input, textarea, button {
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      font-size: 1em;
-    }
-    button {
-      background: #8f94fb;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #6b6ffb;
+    /* Частицы за курсором */
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      z-index: 10000;
+      transition: opacity 1s ease-out, transform 1s ease-out;
+      will-change: opacity, transform;
     }
   </style>
 </head>
 <body>
+
   <!-- Прелоадер -->
-  <div id="preloader">
-    <img src="saf.png" alt="Загрузка...">
-  </div>
+  <div id="preloader"><span>ЗАГРУЗКА...</span></div>
 
   <!-- Звёздный фон -->
   <canvas id="stars"></canvas>
 
   <header>
-    <h1>SAF - Пиксельная мультиплеерная игра</h1>
-    <p>Выживай, строй и веселись с друзьями на островах!</p>
+    <h1>SAF - Multiplayer Sandbox Survival Game</h1>
+    <p>Пиксельная мультиплеерная игра про выживание на острове с друзьями</p>
   </header>
 
   <div class="section">
-    <h2>Часто задаваемые вопросы</h2>
-    <details class="faq-item">
-      <summary>Как скачать игру?</summary>
-      <p>Нажмите на кнопку "Скачать игру" в разделе ниже.</p>
-    </details>
-    <details class="faq-item">
-      <summary>На каких платформах работает SAF?</summary>
-      <p>Игра работает на Windows. В будущем появится поддержка других платформ.</p>
-    </details>
-    <details class="faq-item">
-      <summary>Можно ли играть с друзьями?</summary>
-      <p>Да! SAF — это мультиплеерная игра, вы можете подключаться к серверам или создавать свои.</p>
-    </details>
-    <details class="faq-item">
-      <summary>Будет ли игра обновляться?</summary>
-      <p>Да. Планируются регулярные апдейты с новыми фичами и улучшениями.</p>
-    </details>
-    <details class="faq-item">
-      <summary>Есть ли донат?</summary>
-      <p>Нет. Игра бесплатная и без Pay-to-Win.</p>
-    </details>
+    <h2>О игре</h2>
+    <p>
+      SAF — 2D пиксельная инди игра, где ты можешь делать всё, что захочешь! Построй дом, исследуй острова, плавай на лодке и сражайся с друзьями!
+    </p>
+    <img src="screenshot1.png" alt="Скриншот 1" class="screenshot" />
   </div>
 
   <div class="section">
-    <h2>Связаться с нами</h2>
-    <form action="https://formsubmit.co/safmultiplayergame@gmail.com" method="POST">
-      <input type="text" name="name" placeholder="Ваше имя" required>
-      <input type="email" name="email" placeholder="Ваша почта" required>
-      <textarea name="message" rows="5" placeholder="Ваше сообщение" required></textarea>
-      <button type="submit">Отправить</button>
-    </form>
+    <h2>Особенности</h2>
+    <ul>
+      <li>🏝️ Большие острова</li>
+      <li>🛶 Путешествия по воде</li>
+      <li>🤝 Онлайн мультиплеер</li>
+      <li>⚒️ Множество механик</li>
+    </ul>
+    <img src="screenshot2.png" alt="Скриншот 2" class="screenshot" />
+  </div>
+
+  <div class="section">
+    <h2>Ссылки</h2>
+    <div class="links">
+      <a href="https://vodeflo.itch.io/saf" target="_blank" rel="noopener noreferrer">
+        <img src="Itchio.png" alt="Itch.io" class="icon" />
+        Скачать игру
+      </a>
+      <a href="https://discord.gg/QKehemHmP7" target="_blank" rel="noopener noreferrer">
+        <img src="Discord.png" alt="Discord" class="icon" />
+        Discord сервер
+      </a>
+      <a href="https://t.me/+KhWkvXTfP0JmNTc0" target="_blank" rel="noopener noreferrer">
+        <img src="Telegram.png" alt="Telegram" class="icon" />
+        Telegram канал
+      </a>
+    </div>
   </div>
 
   <script>
-    // Прелоадер исчезает
-    window.addEventListener("load", () => {
-      const preloader = document.getElementById("preloader");
-      preloader.style.opacity = "0";
-      setTimeout(() => preloader.style.display = "none", 1000);
+    // Прелоадер
+    window.addEventListener('load', () => {
+      const preloader = document.getElementById('preloader');
+      preloader.style.opacity = '0';
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, 500);
     });
 
-    // Анимация звёзд
+    // Звёздный фон
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
-    let w = canvas.width = window.innerWidth;
-    let h = canvas.height = window.innerHeight;
-    const stars = Array.from({ length: 200 }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: Math.random() * 1.5,
-      dx: Math.random() * 0.3 + 0.05
-    }));
+    let width, height;
+    const stars = [];
+    const STAR_COUNT = 300;
+    function Star() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.size = Math.random() * 1.5 + 0.5;
+      this.speed = this.size * 0.1;
+      this.opacity = Math.random();
+    }
+    Star.prototype.update = function() {
+      this.x -= this.speed;
+      if (this.x < 0) {
+        this.x = width;
+        this.y = Math.random() * height;
+        this.opacity = Math.random();
+      }
+    };
+    Star.prototype.draw = function() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+      ctx.shadowColor = 'white';
+      ctx.shadowBlur = 6;
+      ctx.fill();
+    };
+    function init() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * devicePixelRatio;
+      canvas.height = height * devicePixelRatio;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+      stars.length = 0;
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push(new Star());
+      }
+    }
     function animate() {
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = "#fff";
-      for (const s of stars) {
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
-        s.x -= s.dx;
-        if (s.x < 0) {
-          s.x = w;
-          s.y = Math.random() * h;
-        }
+      ctx.clearRect(0, 0, width, height);
+      for (const star of stars) {
+        star.update();
+        star.draw();
       }
       requestAnimationFrame(animate);
     }
-    window.addEventListener('resize', () => {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    });
+    window.addEventListener('resize', init);
+    init();
     animate();
+
+    // Частицы за курсором — исправлено
+    window.addEventListener('mousemove', e => {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      const size = Math.random() * 6 + 4;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = e.clientX + 'px';
+      particle.style.top = e.clientY + 'px';
+      particle.style.background = `hsl(240, 70%, ${60 + Math.random() * 20}%)`;
+      document.body.appendChild(particle);
+
+      requestAnimationFrame(() => {
+        particle.style.opacity = '0';
+        particle.style.transform = 'translateY(-30px) scale(0)';
+      });
+
+      setTimeout(() => {
+        particle.remove();
+      }, 1000);
+    });
+
+    // Параллакс с плавным сдвигом
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const header = document.querySelector('header');
+      header.style.transform = `translateY(${scrollY * 0.3}px)`;
+      document.querySelectorAll('.section').forEach((section, i) => {
+        section.style.transform = `translateY(${scrollY * 0.15 * (i + 1)}px)`;
+      });
+      document.querySelectorAll('img.screenshot').forEach((img, i) => {
+        img.style.transform = `translateY(${scrollY * 0.2 * (i + 1)}px)`;
+      });
+    });
   </script>
 </body>
 </html>
