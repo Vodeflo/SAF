@@ -475,215 +475,187 @@
     <h2>Часто задаваемые вопросы</h2>
     <details class="faq-item">
       <summary>Как скачать игру?</summary>
-      <p>Перейдите на сайт в разделе "ссылки" и нажмите кнопку скачивания.</p>
+      <p>Игра доступна бесплатно в разделе загрузок нашего сайта.</p>
     </details>
     <details class="faq-item">
-      <summary>На каких платформах работает SAF?</summary>
-      <p>Игра работает на Windows. В будущем появится поддержка других платформ.</p>
+      <summary>Какие системные требования?</summary>
+      <p>Поддерживается Windows 10 и выше, Mac OS, Linux. Минимум 4 ГБ RAM.</p>
     </details>
     <details class="faq-item">
-      <summary>Можно ли играть с друзьями?</summary>
-      <p>Да! SAF — это мультиплеерная игра, вы можете подключаться к серверам или создавать свои.</p>
+      <summary>Есть ли мультиплеер?</summary>
+      <p>Да, вы можете играть с друзьями через интернет или локальную сеть.</p>
     </details>
     <details class="faq-item">
-      <summary>Будет ли игра обновляться?</summary>
-      <p>Да. Планируются регулярные апдейты с новыми фичами и улучшениями.</p>
+      <summary>Как связаться с разработчиками?</summary>
+      <p>Используйте форму обратной связи ниже.</p>
     </details>
     <details class="faq-item">
-      <summary>Есть ли донат?</summary>
-      <p>Нет. Игра бесплатная и без Pay-to-Win.</p>
+      <summary>Будут ли добавлены новые функции?</summary>
+      <p>Да, мы регулярно выпускаем обновления с новыми механиками и контентом.</p>
     </details>
-  </div>
-
-  <div class="section">
-    <h2>Ссылки</h2>
-    <div class="links">
-      <a href="https://vodeflo.itch.io/saf" target="_blank" rel="noopener noreferrer">
-        <img src="Itchio.png" alt="Itch.io" class="icon" />
-        Скачать игру
-      </a>
-      <a href="https://discord.gg/QKehemHmP7" target="_blank" rel="noopener noreferrer">
-        <img src="Discord.png" alt="Discord" class="icon" />
-        Discord сервер
-      </a>
-      <a href="https://t.me/+KhWkvXTfP0JmNTc0" target="_blank" rel="noopener noreferrer">
-        <img src="Telegram.png" alt="Telegram" class="icon" />
-        Telegram канал
-      </a>
-    </div>
   </div>
 
   <div class="section contact-form">
     <h2>Связаться с нами</h2>
     <form action="https://formsubmit.co/safmultiplayergame@gmail.com" method="POST" target="_blank">
       <input type="text" name="name" placeholder="Ваше имя" required />
-      <input type="email" name="email" placeholder="Ваша почта" required />
-      <textarea name="message" rows="5" placeholder="Ваше сообщение" required></textarea>
+      <input type="email" name="email" placeholder="Ваш Email" required />
+      <textarea name="message" rows="6" placeholder="Ваше сообщение" required></textarea>
+      <!-- Отключаем капчу -->
+      <input type="hidden" name="_captcha" value="false" />
+      <!-- После отправки перенаправить сюда (текущая страница) -->
+      <input type="hidden" name="_next" value="https://safgame.ru/" />
       <button type="submit">Отправить</button>
     </form>
   </div>
 
-  <script>
-    // Прелоадер
-    window.addEventListener('load', () => {
+  <div class="section links">
+    <h2>Ссылки</h2>
+    <a href="https://github.com/safmultiplayergame" target="_blank" rel="noopener">
+      <img class="icon" src="github.png" alt="GitHub" /> GitHub
+    </a>
+    <a href="https://discord.gg/safmultiplayer" target="_blank" rel="noopener">
+      <img class="icon" src="discord.png" alt="Discord" /> Discord
+    </a>
+    <a href="https://steamcommunity.com/app/1234567" target="_blank" rel="noopener">
+      <img class="icon" src="steam.png" alt="Steam" /> Steam
+    </a>
+  </div>
+
+<script>
+  // Прелоадер убираем через 2 секунды
+  window.addEventListener('load', () => {
+    setTimeout(() => {
       const preloader = document.getElementById('preloader');
       preloader.style.opacity = '0';
-      setTimeout(() => {
-        preloader.style.display = 'none';
-      }, 500);
+      setTimeout(() => preloader.style.display = 'none', 600);
+    }, 2000);
+  });
+
+  // Звёздный фон
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  const stars = [];
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  for (let i = 0; i < 150; i++) {
+    stars.push({
+      x: random(0, width),
+      y: random(0, height),
+      size: random(0.5, 1.5),
+      speed: random(0.01, 0.05),
+      alpha: random(0.3, 1),
+      phase: random(0, Math.PI * 2)
     });
+  }
 
-    // Звёздный фон
-    const canvas = document.getElementById('stars');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    const stars = [];
-    const STAR_COUNT = 300;
-
-    function Star() {
-      this.x = Math.random() * width;
-      this.y = Math.random() * height;
-      this.size = Math.random() * 1.5 + 0.5;
-      this.speed = this.size * 0.1;
-      this.opacity = Math.random();
-    }
-    Star.prototype.update = function() {
-      this.x -= this.speed;
-      if (this.x < 0) {
-        this.x = width;
-        this.y = Math.random() * height;
-        this.opacity = Math.random();
-      }
-    };
-    Star.prototype.draw = function() {
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    stars.forEach(s => {
+      s.phase += s.speed;
+      const a = 0.5 + Math.sin(s.phase) * 0.5;
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-      ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+      ctx.fillStyle = `rgba(255, 255, 255, ${a * s.alpha})`;
       ctx.shadowColor = 'white';
-      ctx.shadowBlur = 6;
+      ctx.shadowBlur = 8;
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
       ctx.fill();
-    };
-    function init() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width * devicePixelRatio;
-      canvas.height = height * devicePixelRatio;
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(devicePixelRatio, devicePixelRatio);
-      stars.length = 0;
-      for (let i = 0; i < STAR_COUNT; i++) {
-        stars.push(new Star());
-      }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  // Частицы за курсором
+  document.addEventListener('mousemove', e => {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    const size = Math.random() * 5 + 5;
+    particle.style.width = size + 'px';
+    particle.style.height = size + 'px';
+    particle.style.left = e.clientX + 'px';
+    particle.style.top = e.clientY + 'px';
+    particle.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 70%)`;
+    particle.style.opacity = 1;
+    document.body.appendChild(particle);
+
+    setTimeout(() => {
+      particle.style.opacity = 0;
+      particle.style.transform = `translateY(-20px) scale(0.5)`;
+    }, 100);
+
+    setTimeout(() => {
+      particle.remove();
+    }, 1000);
+  });
+
+  // Луна переключает дневной/ночной режим
+  const moon = document.getElementById('moon');
+  moon.addEventListener('click', () => {
+    if(document.body.classList.contains('night')) {
+      document.body.classList.remove('night');
+      document.body.classList.add('day');
+    } else if(document.body.classList.contains('day')) {
+      document.body.classList.remove('day');
+    } else {
+      document.body.classList.add('night');
     }
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      for (const star of stars) {
-        star.update();
-        star.draw();
-      }
-      requestAnimationFrame(animate);
-    }
-    window.addEventListener('resize', init);
-    init();
-    animate();
+  });
 
-    // Частицы за курсором
-    window.addEventListener('mousemove', e => {
-      const particle = document.createElement('div');
-      particle.classList.add('particle');
-      const size = Math.random() * 6 + 4;
-      particle.style.width = size + 'px';
-      particle.style.height = size + 'px';
-      particle.style.left = e.clientX + 'px';
-      particle.style.top = e.clientY + 'px';
-      particle.style.background = `hsl(240, 70%, ${60 + Math.random() * 20}%)`;
-      document.body.appendChild(particle);
+  // Голосование - включение/выключение инпута для своего варианта
+  const customRadio = document.getElementById('customOptionRadio');
+  const customInput = document.getElementById('customOptionInput');
+  const voteForm = document.getElementById('voteForm');
 
-      requestAnimationFrame(() => {
-        particle.style.opacity = '0';
-        particle.style.transform = 'translateY(-30px) scale(0)';
-      });
-
-      setTimeout(() => {
-        particle.remove();
-      }, 1000);
-    });
-
-    // Параллакс с плавным сдвигом
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      const header = document.querySelector('header');
-      header.style.transform = `translateY(${scrollY * 0.3}px)`;
-      document.querySelectorAll('.section').forEach((section, i) => {
-        section.style.transform = `translateY(${scrollY * 0.15 * (i+1)}px)`;
-      });
-      document.querySelectorAll('img.screenshot').forEach((img, i) => {
-        img.style.transform = `translateY(${scrollY * 0.2 * (i+1)}px)`;
-      });
-    });
-
-    // Автоматический режим день/ночь по времени суток (при загрузке)
-    function setDayNightModeAuto() {
-      const hour = new Date().getHours();
-      if (hour >= 20 || hour < 6) {
-        document.body.classList.add('night');
-        document.body.classList.remove('day');
-      } else {
-        document.body.classList.remove('night');
-        document.body.classList.add('day');
-      }
-    }
-    setDayNightModeAuto();
-    // Обновлять каждые 10 минут
-    setInterval(setDayNightModeAuto, 600000);
-
-    // Переключение темы по клику на луну
-    const moon = document.getElementById('moon');
-    moon.addEventListener('click', () => {
-      if (document.body.classList.contains('night')) {
-        document.body.classList.remove('night');
-        document.body.classList.add('day');
-      } else {
-        document.body.classList.remove('day');
-        document.body.classList.add('night');
-      }
-    });
-
-
-
-    // Голосование
-    const voteForm = document.getElementById('voteForm');
-    const customOptionRadio = document.getElementById('customOptionRadio');
-    const customOptionInput = document.getElementById('customOptionInput');
-
-    customOptionRadio.addEventListener('change', () => {
-      customOptionInput.disabled = !customOptionRadio.checked;
-      if (!customOptionRadio.checked) {
-        customOptionInput.value = '';
-      }
-    });
-
-    voteForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const email = voteForm.email.value.trim();
-      let voteValue = voteForm.vote.value;
-
-      if (voteValue === 'Свой вариант') {
-        voteValue = customOptionInput.value.trim();
-        if (!voteValue) {
-          alert('Пожалуйста, введите свой вариант.');
-          return;
+  customRadio.addEventListener('change', () => {
+    customInput.disabled = !customRadio.checked;
+    if(customRadio.checked) customInput.focus();
+  });
+  voteForm.querySelectorAll('input[name="vote"]').forEach(radio => {
+    if(radio !== customRadio) {
+      radio.addEventListener('change', () => {
+        if(!customRadio.checked) {
+          customInput.disabled = true;
+          customInput.value = '';
         }
+      });
+    }
+  });
+
+  voteForm.addEventListener('submit', e => {
+    e.preventDefault();
+    let email = voteForm.email.value.trim();
+    if(!email) {
+      alert('Пожалуйста, укажите Email.');
+      return;
+    }
+    let voteValue = voteForm.vote.value;
+    if(voteValue === 'Свой вариант') {
+      const customVal = customInput.value.trim();
+      if(!customVal) {
+        alert('Пожалуйста, введите свой вариант голосования.');
+        return;
       }
+      voteValue = customVal;
+    }
+    alert(`Спасибо за голос! Ваш Email: ${email}, Вы выбрали: ${voteValue}`);
+  });
 
-      // Здесь отправка голоса на сервер или просто уведомление
-      alert(`Спасибо за голос! Вы выбрали: ${voteValue}`);
+  // Инициализация темы (дневной)
+  document.body.classList.add('day');
+</script>
 
-      voteForm.reset();
-      customOptionInput.disabled = true;
-    });
-  </script>
 </body>
 </html>
