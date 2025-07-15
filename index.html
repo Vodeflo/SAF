@@ -13,7 +13,7 @@
       font-family: 'Segoe UI', sans-serif;
       overflow-x: hidden;
       position: relative;
-      transition: background 2s ease, color 2s ease;
+      transition: background 0.6s ease, color 0.6s ease;
     }
 
     /* Ночной режим (ночь - темнее с лунным освещением) */
@@ -24,6 +24,61 @@
     body.night header {
       background: linear-gradient(135deg, #1a1a40, #3a3a70);
       box-shadow: 0 4px 20px rgba(58, 58, 112, 0.8);
+    }
+
+    /* Дневной режим (светлая тема) */
+    body.day {
+      background: #fafafa;
+      color: #222222;
+    }
+    body.day header {
+      background: linear-gradient(135deg, #a3d8f4 0%, #6ab0f3 100%);
+      box-shadow: 0 4px 20px rgba(107, 175, 242, 0.7);
+      color: #222;
+    }
+    body.day .section {
+      background: #ffffff;
+      color: #222222;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    body.day .section:nth-child(odd) {
+      background-color: #f0f8ff;
+    }
+    body.day details.faq-item {
+      background: #e3f2fd;
+      box-shadow: 0 0 8px rgba(100, 150, 200, 0.3);
+      color: #222;
+    }
+    body.day details.faq-item[open] {
+      background: #bbdefb;
+    }
+    body.day details.faq-item summary {
+      color: #111;
+    }
+    body.day .vote-section {
+      background: #d6eaff;
+      color: #222;
+      box-shadow: 0 0 10px rgba(100, 150, 230, 0.4);
+    }
+    body.day input[type="email"],
+    body.day input[type="text"],
+    body.day textarea {
+      background: #e9f0fb;
+      color: #222;
+      border: 1px solid #a9c4f3;
+    }
+    body.day .vote-section button {
+      background: #4e78c8;
+      color: #fff;
+    }
+    body.day .vote-section button:hover {
+      background: #6a8ee0;
+    }
+    body.day .links a {
+      color: #4e78c8;
+    }
+    body.day .links a:hover {
+      color: #2a4c8a;
     }
 
     /* Прелоадер */
@@ -82,7 +137,7 @@
       overflow: hidden;
       z-index: 10;
       will-change: transform;
-      transition: transform 0.2s ease-out, background 2s ease;
+      transition: transform 0.2s ease-out, background 0.6s ease;
     }
     header::before {
       content: '';
@@ -127,10 +182,7 @@
       background: #1a1a1a;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-      transition: background 2s ease;
-    }
-    body.night .section {
-      background: #12122a;
+      transition: background 0.6s ease, color 0.6s ease;
     }
     .section:nth-child(odd) {
       background-color: #121212;
@@ -197,12 +249,26 @@
         0 0 30px 5px rgba(200, 220, 255, 0.7);
       filter: drop-shadow(0 0 10px #aaddff);
       opacity: 0;
-      transition: opacity 2s ease;
-      pointer-events: none;
+      transition: opacity 0.6s ease, background 0.6s ease;
+      cursor: pointer;
+      pointer-events: auto;
       z-index: 20;
     }
     body.night #moon {
       opacity: 1;
+      background: radial-gradient(circle at 30% 30%, #f0f0f5, #222244);
+      box-shadow:
+        inset 10px 10px 15px rgba(255, 255, 255, 0.7),
+        0 0 30px 5px rgba(200, 220, 255, 0.7);
+      filter: drop-shadow(0 0 10px #aaddff);
+    }
+    body.day #moon {
+      opacity: 1;
+      background: radial-gradient(circle at 30% 30%, #ffffe0, #ffd966);
+      box-shadow:
+        inset 10px 10px 15px rgba(255, 255, 150, 0.9),
+        0 0 30px 8px rgba(255, 223, 102, 0.8);
+      filter: drop-shadow(0 0 15px #ffdb4d);
     }
 
     /* FAQ стили */
@@ -254,6 +320,7 @@
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
+      transition: background 0.6s ease, color 0.6s ease;
     }
     .vote-section h2 {
       margin-bottom: 15px;
@@ -269,11 +336,13 @@
       border: none;
       border-radius: 6px;
       font-size: 1em;
+      transition: background 0.3s ease, color 0.3s ease;
     }
     .vote-section input,
     .vote-section textarea {
       background: #1a1a3a;
       color: #fff;
+      border: 1px solid #444477;
     }
     .vote-section button {
       background: #4e54c8;
@@ -295,6 +364,63 @@
       margin-left: 20px;
       max-width: 380px;
     }
+
+    /* Связаться с нами - обновленная секция */
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #222244;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 50, 0.7);
+      transition: background 0.6s ease, color 0.6s ease;
+    }
+    body.day .contact-form {
+      background: #e3f2fd;
+      color: #222;
+      box-shadow: 0 0 15px rgba(100, 150, 200, 0.4);
+    }
+    .contact-form h2 {
+      margin-top: 0;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .contact-form input[type="text"],
+    .contact-form input[type="email"],
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+      background: #1a1a3a;
+      color: #fff;
+      transition: background 0.3s ease, color 0.3s ease;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    body.day .contact-form input[type="text"],
+    body.day .contact-form input[type="email"],
+    body.day .contact-form textarea {
+      background: #e9f0fb;
+      color: #222;
+      border: 1px solid #a9c4f3;
+    }
+    .contact-form button {
+      width: 100%;
+      padding: 15px;
+      background: #4e54c8;
+      color: #fff;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .contact-form button:hover {
+      background: #6e74f8;
+    }
   </style>
 </head>
 <body>
@@ -306,7 +432,7 @@
   <canvas id="stars"></canvas>
 
   <!-- Луна -->
-  <div id="moon"></div>
+  <div id="moon" title="Переключить тему"></div>
 
   <header>
     <h1>SAF - Multiplayer Sandbox Survival Game</h1>
@@ -335,18 +461,13 @@
   <div class="section vote-section">
     <h2>Что добавить в следующем обновлении?</h2>
     <form id="voteForm">
-      <input type="email" name="email" placeholder="Ваша почта" required />
-      <label>
-        <input type="radio" name="vote" value="Моды" required /> Моды
-      </label>
-      <label>
-        <input type="radio" name="vote" value="Животные" /> Животные
-      </label>
-      <label>
-        <input type="radio" name="vote" value="Свой вариант" id="customOptionRadio" /> Свой вариант:
-      </label>
-      <input type="text" id="customOptionInput" name="custom_option" placeholder="Введите свой вариант" disabled />
-      <button type="submit">Голосовать</button>
+      <input type="email" name="email" placeholder="Ваш Email (для подтверждения)" required />
+      <label><input type="radio" name="vote" value="Новые острова" checked /> Новые острова</label>
+      <label><input type="radio" name="vote" value="Больше механик" /> Больше механик</label>
+      <label><input type="radio" name="vote" value="Новые предметы" /> Новые предметы</label>
+      <label><input type="radio" name="vote" value="Свой вариант" id="customOptionRadio" /> Свой вариант</label>
+      <input type="text" name="customOption" id="customOptionInput" placeholder="Введите свой вариант" disabled />
+      <button type="submit">Проголосовать</button>
     </form>
   </div>
 
@@ -392,7 +513,7 @@
     </div>
   </div>
 
-  <div class="section">
+  <div class="section contact-form">
     <h2>Связаться с нами</h2>
     <form action="https://formsubmit.co/safmultiplayergame@gmail.com" method="POST" target="_blank" onsubmit="return sendForm(event)">
       <input type="text" name="name" placeholder="Ваше имя" required />
@@ -503,17 +624,32 @@
       });
     });
 
-    // Автоматический режим день/ночь по времени суток
-    function setDayNightMode() {
+    // Автоматический режим день/ночь по времени суток (при загрузке)
+    function setDayNightModeAuto() {
       const hour = new Date().getHours();
       if (hour >= 20 || hour < 6) {
         document.body.classList.add('night');
+        document.body.classList.remove('day');
       } else {
         document.body.classList.remove('night');
+        document.body.classList.add('day');
       }
     }
-    setDayNightMode();
-    setInterval(setDayNightMode, 600000);
+    setDayNightModeAuto();
+    // Обновлять каждые 10 минут
+    setInterval(setDayNightModeAuto, 600000);
+
+    // Переключение темы по клику на луну
+    const moon = document.getElementById('moon');
+    moon.addEventListener('click', () => {
+      if (document.body.classList.contains('night')) {
+        document.body.classList.remove('night');
+        document.body.classList.add('day');
+      } else {
+        document.body.classList.remove('day');
+        document.body.classList.add('night');
+      }
+    });
 
     // Отправка формы обратной связи (чтобы не перезагружать страницу)
     async function sendForm(event) {
