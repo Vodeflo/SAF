@@ -108,7 +108,7 @@
       margin: 0;
     }
 
-    /* Секции с анимацией появления */
+    /* Секции без анимации появления */
     .section {
       padding: 40px 20px;
       max-width: 900px;
@@ -116,13 +116,8 @@
       background: #1a1a1a;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .section.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
     }
     .section:nth-child(odd) {
       background-color: #121212;
@@ -176,13 +171,8 @@
       box-shadow: 0 0 20px rgba(143, 148, 251, 0.6);
       color: #d0d4ff;
       font-style: italic;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-    .reviews.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
     }
     .reviews h2 {
       color: #8f94fb;
@@ -280,11 +270,9 @@
       setTimeout(() => {
         preloader.style.display = 'none';
       }, 500);
-      // При загрузке проверяем и запускаем анимацию появления секций и отзывов
-      revealOnScroll();
     });
 
-    // Звёздный фон (тот же код, что и раньше)
+    // Звёздный фон
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -339,22 +327,6 @@
     init();
     animate();
 
-function revealOnScroll() {
-  const sections = document.querySelectorAll('.section, .reviews');
-  const windowHeight = window.innerHeight;
-  sections.forEach(section => {
-    const rect = section.getBoundingClientRect();
-    if (rect.top < windowHeight * 0.85) {
-      section.classList.add('visible');
-    } else {
-      section.classList.remove('visible'); // можно убрать, если не надо скрывать обратно
-    }
-  });
-}
-window.addEventListener('scroll', revealOnScroll);
-window.addEventListener('load', revealOnScroll);  // <-- добавляем чтобы сработало сразу при загрузке
-
-
     // Частицы за курсором
     window.addEventListener('mousemove', e => {
       const particle = document.createElement('div');
@@ -366,7 +338,6 @@ window.addEventListener('load', revealOnScroll);  // <-- добавляем чт
       particle.style.top = e.clientY + 'px';
       particle.style.background = `hsl(240, 70%, ${60 + Math.random() * 20}%)`;
       document.body.appendChild(particle);
-      // Анимация и удаление
       setTimeout(() => {
         particle.remove();
       }, 1000);
