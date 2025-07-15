@@ -244,21 +244,19 @@
       line-height: 1.4em;
     }
 
-    /* Голосование */
+    /* Голосование стили */
     .vote-section {
       margin-top: 40px;
       padding: 30px;
       background: #222244;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-      max-width: 900px;
+      max-width: 600px;
       margin-left: auto;
       margin-right: auto;
-      color: #ccddee;
     }
     .vote-section h2 {
       margin-bottom: 15px;
-      color: #8f94fb;
     }
     .vote-section input[type="email"],
     .vote-section input[type="text"],
@@ -271,6 +269,9 @@
       border: none;
       border-radius: 6px;
       font-size: 1em;
+    }
+    .vote-section input,
+    .vote-section textarea {
       background: #1a1a3a;
       color: #fff;
     }
@@ -284,9 +285,15 @@
       background: #6e74f8;
     }
     .vote-section label {
-      user-select: none;
-      font-weight: 600;
       cursor: pointer;
+      user-select: none;
+      display: block;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+    .vote-section #customOptionInput {
+      margin-left: 20px;
+      max-width: 380px;
     }
   </style>
 </head>
@@ -323,6 +330,24 @@
       <li>⚒️ Множество механик</li>
     </ul>
     <img src="screenshot2.png" alt="Скриншот 2" class="screenshot" />
+  </div>
+
+  <div class="section vote-section">
+    <h2>Что добавить в следующем обновлении?</h2>
+    <form id="voteForm">
+      <input type="email" name="email" placeholder="Ваша почта" required />
+      <label>
+        <input type="radio" name="vote" value="Моды" required /> Моды
+      </label>
+      <label>
+        <input type="radio" name="vote" value="Животные" /> Животные
+      </label>
+      <label>
+        <input type="radio" name="vote" value="Свой вариант" id="customOptionRadio" /> Свой вариант:
+      </label>
+      <input type="text" id="customOptionInput" name="custom_option" placeholder="Введите свой вариант" disabled />
+      <button type="submit">Голосовать</button>
+    </form>
   </div>
 
   <div class="section">
@@ -374,22 +399,6 @@
       <input type="email" name="email" placeholder="Ваша почта" required />
       <textarea name="message" rows="5" placeholder="Ваше сообщение" required></textarea>
       <button type="submit">Отправить</button>
-    </form>
-  </div>
-
-  <!-- Голосование -->
-  <div class="section vote-section">
-    <h2>Что добавить в следующем обновлении?</h2>
-    <form id="voteForm">
-      <input type="email" name="email" placeholder="Ваша почта" required />
-      <label><input type="radio" name="vote" value="Моды" required /> Моды</label><br />
-      <label><input type="radio" name="vote" value="Животные" /> Животные</label><br />
-      <label>
-        <input type="radio" name="vote" value="Свой вариант" id="customOptionRadio" />
-        Свой вариант:
-      </label>
-      <input type="text" id="customOptionInput" name="custom_option" placeholder="Введите свой вариант" disabled />
-      <button type="submit">Голосовать</button>
     </form>
   </div>
 
@@ -466,7 +475,104 @@
       const size = Math.random() * 6 + 4;
       particle.style.width = size + 'px';
       particle.style.height = size + 'px';
-      particle.style.left =
+      particle.style.left = e.clientX + 'px';
+      particle.style.top = e.clientY + 'px';
+      particle.style.background = `hsl(240, 70%, ${60 + Math.random() * 20}%)`;
+      document.body.appendChild(particle);
+
+      requestAnimationFrame(() => {
+        particle.style.opacity = '0';
+        particle.style.transform = 'translateY(-30px) scale(0)';
+      });
+
+      setTimeout(() => {
+        particle.remove();
+      }, 1000);
+    });
+
+    // Параллакс с плавным сдвигом
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const header = document.querySelector('header');
+      header.style.transform = `translateY(${scrollY * 0.3}px)`;
+      document.querySelectorAll('.section').forEach((section, i) => {
+        section.style.transform = `translateY(${scrollY * 0.15 * (i+1)}px)`;
+      });
+      document.querySelectorAll('img.screenshot').forEach((img, i) => {
+        img.style.transform = `translateY(${scrollY * 0.2 * (i+1)}px)`;
+      });
+    });
+
+    // Автоматический режим день/ночь по времени суток
+    function setDayNightMode() {
+      const hour = new Date().getHours();
+      if (hour >= 20 || hour < 6) {
+        document.body.classList.add('night');
+      } else {
+        document.body.classList.remove('night');
+      }
+    }
+    setDayNightMode();
+    setInterval(setDayNightMode, 600000);
+
+    // Отправка формы обратной связи (чтобы не перезагружать страницу)
+    async function sendForm(event) {
+      event.preventDefault();
+      const form = event.target;
+      const data = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json'
+          },
+          body: data,
+        });
+
+        if (response.ok) {
+          alert('Спасибо! Ваше сообщение отправлено.');
+          form.reset();
+        } else {
+          alert('Ошибка при отправке. Попробуйте позже.');
+        }
+      } catch (error) {
+        alert('Ошибка сети. Попробуйте позже.');
+      }
+
+      return false; // чтобы не перезагружать страницу
+    }
+
+    // Голосование
+    const voteForm = document.getElementById('voteForm');
+    const customOptionRadio = document.getElementById('customOptionRadio');
+    const customOptionInput = document.getElementById('customOptionInput');
+
+    customOptionRadio.addEventListener('change', () => {
+      customOptionInput.disabled = !customOptionRadio.checked;
+      if (!customOptionRadio.checked) {
+        customOptionInput.value = '';
+      }
+    });
+
+    voteForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const email = voteForm.email.value.trim();
+      let voteValue = voteForm.vote.value;
+
+      if (voteValue === 'Свой вариант') {
+        voteValue = customOptionInput.value.trim();
+        if (!voteValue) {
+          alert('Пожалуйста, введите свой вариант.');
+          return;
+        }
+      }
+
+      // Здесь отправка голоса на сервер или просто уведомление
+      alert(`Спасибо за голос! Вы выбрали: ${voteValue}`);
+
+      voteForm.reset();
+      customOptionInput.disabled = true;
     });
   </script>
 </body>
