@@ -159,77 +159,13 @@
       filter: drop-shadow(0 0 2px rgba(143, 148, 251, 0.7));
     }
 
-    /* Форма отзывов */
-    #review-form {
-      display: flex;
-      flex-direction: column;
-      max-width: 900px;
-      margin: 40px auto 20px auto;
-      background: #222;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(143, 148, 251, 0.6);
-    }
-    #review-form input[type="text"],
-    #review-form textarea {
-      background: #121212;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 15px;
-      margin-bottom: 15px;
-      color: #eee;
-      font-size: 1em;
-      resize: vertical;
-    }
-    #review-form input[type="text"]::placeholder,
-    #review-form textarea::placeholder {
-      color: #888;
-    }
-    #review-form button {
-      align-self: flex-start;
-      background: #4e54c8;
-      color: #fff;
-      font-weight: 700;
-      padding: 10px 25px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-size: 1.1em;
-    }
-    #review-form button:hover {
-      background: #8f94fb;
-    }
-
-    /* Блок с отзывами */
-    #reviews-container {
-      max-width: 900px;
-      margin: 0 auto 60px auto;
-      padding: 20px;
-      background: #222;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(143, 148, 251, 0.6);
-      color: #d0d4ff;
-      font-style: italic;
-      min-height: 80px;
-    }
-    #reviews-container h2 {
-      color: #8f94fb;
-      margin-bottom: 20px;
-      font-style: normal;
-      text-align: center;
-    }
-    .review-item {
-      margin-bottom: 15px;
-      border-left: 4px solid #8f94fb;
-      padding-left: 15px;
-      font-style: normal;
-      color: #e0e4ff;
-    }
-    .review-nick {
-      font-weight: 700;
-      margin-right: 10px;
-      color: #b3b7ff;
+    /* Частицы за курсором */
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      z-index: 10000;
+      transition: opacity 1s ease-out, transform 1s ease-out;
     }
   </style>
 </head>
@@ -280,21 +216,6 @@
         <img src="Telegram.png" alt="Telegram" class="icon" />
         Telegram канал
       </a>
-    </div>
-  </div>
-
-  <!-- Форма для отзывов -->
-  <form id="review-form">
-    <input type="text" id="nick" placeholder="Ваш ник" required maxlength="20" />
-    <textarea id="review" placeholder="Ваш отзыв" required maxlength="300" rows="4"></textarea>
-    <button type="submit">Отправить отзыв</button>
-  </form>
-
-  <!-- Блок с отзывами -->
-  <div id="reviews-container">
-    <h2>Отзывы игроков</h2>
-    <div id="reviews-list">
-      <!-- Отзывы будут здесь -->
     </div>
   </div>
 
@@ -363,7 +284,7 @@
     init();
     animate();
 
-    // Частицы за курсором
+    // Частицы за курсором — исправлено
     window.addEventListener('mousemove', e => {
       const particle = document.createElement('div');
       particle.classList.add('particle');
@@ -374,6 +295,12 @@
       particle.style.top = e.clientY + 'px';
       particle.style.background = `hsl(240, 70%, ${60 + Math.random() * 20}%)`;
       document.body.appendChild(particle);
+
+      requestAnimationFrame(() => {
+        particle.style.opacity = '0';
+        particle.style.transform = 'translateY(-30px) scale(0)';
+      });
+
       setTimeout(() => {
         particle.remove();
       }, 1000);
@@ -391,53 +318,6 @@
         img.style.transform = `translateY(${scrollY * 0.2 * (i+1)}px)`;
       });
     });
-
-    // Отзывы — работа с localStorage
-    const form = document.getElementById('review-form');
-    const nickInput = document.getElementById('nick');
-    const reviewInput = document.getElementById('review');
-    const reviewsList = document.getElementById('reviews-list');
-
-    // Загрузка отзывов из localStorage
-    function loadReviews() {
-      const reviews = JSON.parse(localStorage.getItem('gameReviews') || '[]');
-      reviewsList.innerHTML = '';
-      if (reviews.length === 0) {
-        reviewsList.innerHTML = '<p style="text-align:center; color:#888;">Отзывов пока нет. Будь первым!</p>';
-        return;
-      }
-      reviews.forEach(({nick, review}) => {
-        const div = document.createElement('div');
-        div.classList.add('review-item');
-        div.innerHTML = `<span class="review-nick">${escapeHTML(nick)}:</span> ${escapeHTML(review)}`;
-        reviewsList.appendChild(div);
-      });
-    }
-
-    // Функция для безопасности — экранируем HTML
-    function escapeHTML(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    // Обработка отправки формы
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const nick = nickInput.value.trim();
-      const review = reviewInput.value.trim();
-      if (!nick || !review) return;
-
-      const reviews = JSON.parse(localStorage.getItem('gameReviews') || '[]');
-      reviews.push({nick, review});
-      localStorage.setItem('gameReviews', JSON.stringify(reviews));
-      nickInput.value = '';
-      reviewInput.value = '';
-      loadReviews();
-    });
-
-    // Загрузить отзывы при старте
-    loadReviews();
   </script>
 </body>
 </html>
