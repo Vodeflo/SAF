@@ -2,38 +2,31 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>SAF — Космический фон со звездами</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SAF - Multiplayer Game</title>
   <style>
-    html, body {
-      margin: 0; padding: 0; height: 100%; width: 100%;
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
       background: #0e0e0e;
-      overflow: hidden;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #f5f5f5;
+      overflow-x: hidden;
     }
-canvas {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: -1;
-  background: #0e0e0e;
-  display: block;
-  pointer-events: none; /* Ключевой момент! */
-}
 
-    }
     header {
-      position: relative;
       padding: 60px 20px;
       text-align: center;
       background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+      animation: fadeIn 1.2s ease-out;
+      box-shadow: 0 4px 20px rgba(143, 148, 251, 0.5);
       border-bottom-left-radius: 30px;
       border-bottom-right-radius: 30px;
-      box-shadow: 0 4px 20px rgba(143, 148, 251, 0.5);
-      color: white;
-      z-index: 1;
+      color: #fff;
+      position: relative;
       overflow: hidden;
+      z-index: 10;
     }
+
     header::before {
       content: '';
       position: absolute;
@@ -41,7 +34,7 @@ canvas {
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.15), transparent 70%);
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15), transparent 70%);
       animation: pulse 6s ease-in-out infinite;
       pointer-events: none;
       border-radius: 50%;
@@ -49,11 +42,13 @@ canvas {
       mix-blend-mode: screen;
       z-index: 0;
     }
+
     header h1, header p {
       position: relative;
       z-index: 1;
       margin: 0;
     }
+
     @keyframes pulse {
       0%, 100% {
         transform: scale(1);
@@ -64,17 +59,28 @@ canvas {
         opacity: 0.3;
       }
     }
+
+    h1 {
+      font-size: 3em;
+      margin: 0;
+    }
+
     .section {
       padding: 40px 20px;
       max-width: 900px;
       margin: 40px auto;
       background: #1a1a1a;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.7);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+      opacity: 1;
+      transform: none;
+      animation: none;
     }
+
     .section:nth-child(odd) {
-      background: #121212;
+      background-color: #121212;
     }
+
     img.screenshot {
       width: 100%;
       border-radius: 12px;
@@ -82,6 +88,7 @@ canvas {
       margin: 20px 0;
       display: block;
     }
+
     .links a {
       display: inline-flex;
       align-items: center;
@@ -92,11 +99,13 @@ canvas {
       font-weight: 600;
       font-size: 1.1em;
     }
+
     .links a:hover {
       text-decoration: underline;
       color: #b3b7ff;
       transform: scale(1.05);
     }
+
     .icon {
       width: 24px;
       height: 24px;
@@ -105,6 +114,17 @@ canvas {
       object-fit: cover;
       filter: drop-shadow(0 0 2px rgba(143, 148, 251, 0.7));
     }
+
+    canvas#stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* Чтобы не мешать кликам и прокрутке */
+      z-index: 0;
+      background: transparent;
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -112,11 +132,11 @@ canvas {
   <canvas id="stars"></canvas>
 
   <header>
-    <h1>SAF — Multiplayer Sandbox Survival Game</h1>
+    <h1>SAF - Multiplayer Sandbox Survival Game</h1>
     <p>Пиксельная мультиплеерная игра про выживание на острове с друзьями</p>
   </header>
 
-  <div class="section" style="animation-delay: 0.5s;">
+  <div class="section">
     <h2>О игре</h2>
     <p>
       SAF — 2D пиксельная инди игра, где ты можешь делать всё, что захочешь! Построй дом, исследуй острова, плавай на лодке и сражайся с друзьями!
@@ -124,7 +144,7 @@ canvas {
     <img src="screenshot1.png" alt="Скриншот 1" class="screenshot" />
   </div>
 
-  <div class="section" style="animation-delay: 1s;">
+  <div class="section">
     <h2>Особенности</h2>
     <ul>
       <li>🏝️ Большие острова</li>
@@ -135,7 +155,7 @@ canvas {
     <img src="screenshot2.png" alt="Скриншот 2" class="screenshot" />
   </div>
 
-  <div class="section" style="animation-delay: 1.5s;">
+  <div class="section">
     <h2>Ссылки</h2>
     <div class="links">
       <a href="https://vodeflo.itch.io/saf" target="_blank" rel="noopener noreferrer">
@@ -210,13 +230,10 @@ canvas {
       requestAnimationFrame(animate);
     }
 
-    window.addEventListener('resize', () => {
-      init();
-    });
+    window.addEventListener('resize', init);
 
     init();
     animate();
   </script>
-
 </body>
 </html>
