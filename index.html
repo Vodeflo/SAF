@@ -339,18 +339,21 @@
     init();
     animate();
 
-    // Анимация появления при скролле
-    function revealOnScroll() {
-      const sections = document.querySelectorAll('.section, .reviews');
-      const windowHeight = window.innerHeight;
-      sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top < windowHeight * 0.85) {
-          section.classList.add('visible');
-        }
-      });
+function revealOnScroll() {
+  const sections = document.querySelectorAll('.section, .reviews');
+  const windowHeight = window.innerHeight;
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top < windowHeight * 0.85) {
+      section.classList.add('visible');
+    } else {
+      section.classList.remove('visible'); // можно убрать, если не надо скрывать обратно
     }
-    window.addEventListener('scroll', revealOnScroll);
+  });
+}
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', revealOnScroll);  // <-- добавляем чтобы сработало сразу при загрузке
+
 
     // Частицы за курсором
     window.addEventListener('mousemove', e => {
