@@ -5,33 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SAF - Multiplayer Game</title>
   <style>
-    /* === Добавленные стили для анимированного лого === */
-    #logo-container {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10001;
-      pointer-events: none;
-    }
-    #animated-logo {
-      width: 120px;
-      animation: pulseLogo 3s infinite ease-in-out;
-      filter: drop-shadow(0 0 8px #8f94fb);
-      opacity: 0.9;
-    }
-    @keyframes pulseLogo {
-      0%, 100% {
-        opacity: 1;
-        transform: translateX(-50%) scale(1);
-      }
-      50% {
-        opacity: 0.75;
-        transform: translateX(-50%) scale(1.05);
-      }
-    }
-
-    /* === Существующие стили === */
     body, html {
       margin: 0; padding: 0;
       height: 100%;
@@ -452,11 +425,6 @@
 </head>
 <body>
 
-  <!-- Анимированное лого вверху -->
-  <div id="logo-container">
-    <img src="saf.png" alt="SAF Logo" id="animated-logo" />
-  </div>
-
   <!-- Прелоадер -->
   <div id="preloader"><span>ЗАГРУЗКА...</span></div>
 
@@ -494,170 +462,253 @@
     <h2>Что добавить в следующем обновлении?</h2>
     <form id="voteForm">
       <input type="email" name="email" placeholder="Ваш Email (для подтверждения)" required />
-      <label><input type="radio" name="vote" value="Новые острова" required /> Новые острова</label>
-      <label><input type="radio" name="vote" value="Новые персонажи" /> Новые персонажи</label>
-      <label><input type="radio" name="vote" value="Новые лодки" /> Новые лодки</label>
-      <label><input type="radio" name="vote" value="Режим шутера" /> Режим шутера</label>
-      <label>
-        <input type="radio" name="vote" value="Другое" id="customOption" />
-        Другое: <input type="text" id="customOptionInput" placeholder="Ваш вариант" disabled />
-      </label>
-      <button type="submit">Отправить голос</button>
+      <label><input type="radio" name="vote" value="Новые острова" checked /> Новые острова</label>
+      <label><input type="radio" name="vote" value="Больше механик" /> Больше механик</label>
+      <label><input type="radio" name="vote" value="Новые предметы" /> Новые предметы</label>
+      <label><input type="radio" name="vote" value="Свой вариант" id="customOptionRadio" /> Свой вариант</label>
+      <input type="text" name="customOption" id="customOptionInput" placeholder="Введите свой вариант" disabled />
+      <button type="submit">Проголосовать</button>
     </form>
-    <div id="voteMessage" style="margin-top: 15px; font-weight: bold;"></div>
+  </div>
+
+  <div class="section">
+    <h2>Часто задаваемые вопросы</h2>
+    <details class="faq-item">
+      <summary>Как скачать игру?</summary>
+      <p>Нажмите на кнопку "Скачать игру" в разделе "Ссылки".</p>
+    </details>
+    <details class="faq-item">
+      <summary>На каких платформах работает SAF?</summary>
+      <p>Игра работает на Windows. В будущем появится поддержка других платформ.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Можно ли играть с друзьями?</summary>
+      <p>Да! SAF — это мультиплеерная игра, вы можете подключаться к серверам или создавать свои.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Будет ли игра обновляться?</summary>
+      <p>Да. Планируются регулярные апдейты с новыми фичами и улучшениями.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Есть ли донат?</summary>
+      <p>Нет. Игра бесплатная и без Pay-to-Win.</p>
+    </details>
+  </div>
+
+  <div class="section">
+    <h2>Ссылки</h2>
+    <div class="links">
+      <a href="https://vodeflo.itch.io/saf" target="_blank" rel="noopener noreferrer">
+        <img src="Itchio.png" alt="Itch.io" class="icon" />
+        Скачать игру
+      </a>
+      <a href="https://discord.gg/QKehemHmP7" target="_blank" rel="noopener noreferrer">
+        <img src="Discord.png" alt="Discord" class="icon" />
+        Discord сервер
+      </a>
+      <a href="https://t.me/+KhWkvXTfP0JmNTc0" target="_blank" rel="noopener noreferrer">
+        <img src="Telegram.png" alt="Telegram" class="icon" />
+        Telegram канал
+      </a>
+    </div>
   </div>
 
   <div class="section contact-form">
     <h2>Связаться с нами</h2>
-    <form id="contactForm">
+    <form action="https://formsubmit.co/safmultiplayergame@gmail.com" method="POST" target="_blank" onsubmit="return sendForm(event)">
       <input type="text" name="name" placeholder="Ваше имя" required />
-      <input type="email" name="email" placeholder="Ваш Email" required />
-      <textarea name="message" placeholder="Сообщение" rows="5" required></textarea>
+      <input type="email" name="email" placeholder="Ваша почта" required />
+      <textarea name="message" rows="5" placeholder="Ваше сообщение" required></textarea>
       <button type="submit">Отправить</button>
     </form>
-    <div id="contactMessage" style="margin-top: 15px; font-weight: bold;"></div>
   </div>
 
   <script>
-    // Скрывать/показывать инпут кастомного варианта
-    const customOptionRadio = document.getElementById('customOption');
-    const customOptionInput = document.getElementById('customOptionInput');
-    customOptionRadio.addEventListener('change', () => {
-      customOptionInput.disabled = !customOptionRadio.checked;
-      if (!customOptionRadio.checked) {
-        customOptionInput.value = '';
-      } else {
-        customOptionInput.focus();
-      }
-    });
-    // Если выбрали другой радиокнопкой - отключаем кастомный инпут
-    const voteRadios = document.querySelectorAll('input[name="vote"]');
-    voteRadios.forEach(radio => {
-      if (radio !== customOptionRadio) {
-        radio.addEventListener('change', () => {
-          if (radio.checked) {
-            customOptionInput.disabled = true;
-            customOptionInput.value = '';
-          }
-        });
-      }
-    });
-
-    // Обработка голосования (пример, просто выводит сообщение)
-    document.getElementById('voteForm').addEventListener('submit', e => {
-      e.preventDefault();
-      const email = e.target.email.value.trim();
-      let voteValue = '';
-      if (customOptionRadio.checked) {
-        voteValue = customOptionInput.value.trim();
-      }
-      if (!voteValue) {
-        voteValue = e.target.vote.value;
-      }
-      if (!email || !voteValue) {
-        alert('Пожалуйста, заполните все поля!');
-        return;
-      }
-      document.getElementById('voteMessage').textContent = `Спасибо за голос! Вы выбрали: ${voteValue}`;
-      e.target.reset();
-      customOptionInput.disabled = true;
-    });
-
-    // Отправка формы связи (имитация)
-    document.getElementById('contactForm').addEventListener('submit', e => {
-      e.preventDefault();
-      const name = e.target.name.value.trim();
-      const email = e.target.email.value.trim();
-      const message = e.target.message.value.trim();
-      if (!name || !email || !message) {
-        alert('Пожалуйста, заполните все поля!');
-        return;
-      }
-      // Здесь должен быть реальный запрос на сервер или email
-      document.getElementById('contactMessage').textContent = `Спасибо, ${name}! Мы получили ваше сообщение.`;
-      e.target.reset();
-    });
-
     // Прелоадер
     window.addEventListener('load', () => {
       const preloader = document.getElementById('preloader');
       preloader.style.opacity = '0';
-      setTimeout(() => preloader.style.display = 'none', 600);
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, 500);
     });
 
-    // Луна - переключение темы день/ночь
+    // Звёздный фон
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    const stars = [];
+    const STAR_COUNT = 300;
+
+    function Star() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.size = Math.random() * 1.5 + 0.5;
+      this.speed = this.size * 0.1;
+      this.opacity = Math.random();
+    }
+    Star.prototype.update = function() {
+      this.x -= this.speed;
+      if (this.x < 0) {
+        this.x = width;
+        this.y = Math.random() * height;
+        this.opacity = Math.random();
+      }
+    };
+    Star.prototype.draw = function() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+      ctx.shadowColor = 'white';
+      ctx.shadowBlur = 6;
+      ctx.fill();
+    };
+    function init() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * devicePixelRatio;
+      canvas.height = height * devicePixelRatio;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+      stars.length = 0;
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push(new Star());
+      }
+    }
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      for (const star of stars) {
+        star.update();
+        star.draw();
+      }
+      requestAnimationFrame(animate);
+    }
+    window.addEventListener('resize', init);
+    init();
+    animate();
+
+    // Частицы за курсором
+    window.addEventListener('mousemove', e => {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      const size = Math.random() * 6 + 4;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = e.clientX + 'px';
+      particle.style.top = e.clientY + 'px';
+      particle.style.background = `hsl(240, 70%, ${60 + Math.random() * 20}%)`;
+      document.body.appendChild(particle);
+
+      requestAnimationFrame(() => {
+        particle.style.opacity = '0';
+        particle.style.transform = 'translateY(-30px) scale(0)';
+      });
+
+      setTimeout(() => {
+        particle.remove();
+      }, 1000);
+    });
+
+    // Параллакс с плавным сдвигом
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const header = document.querySelector('header');
+      header.style.transform = `translateY(${scrollY * 0.3}px)`;
+      document.querySelectorAll('.section').forEach((section, i) => {
+        section.style.transform = `translateY(${scrollY * 0.15 * (i+1)}px)`;
+      });
+      document.querySelectorAll('img.screenshot').forEach((img, i) => {
+        img.style.transform = `translateY(${scrollY * 0.2 * (i+1)}px)`;
+      });
+    });
+
+    // Автоматический режим день/ночь по времени суток (при загрузке)
+    function setDayNightModeAuto() {
+      const hour = new Date().getHours();
+      if (hour >= 20 || hour < 6) {
+        document.body.classList.add('night');
+        document.body.classList.remove('day');
+      } else {
+        document.body.classList.remove('night');
+        document.body.classList.add('day');
+      }
+    }
+    setDayNightModeAuto();
+    // Обновлять каждые 10 минут
+    setInterval(setDayNightModeAuto, 600000);
+
+    // Переключение темы по клику на луну
     const moon = document.getElementById('moon');
     moon.addEventListener('click', () => {
       if (document.body.classList.contains('night')) {
         document.body.classList.remove('night');
         document.body.classList.add('day');
-      } else if (document.body.classList.contains('day')) {
-        document.body.classList.remove('day');
-        document.body.classList.add('night');
       } else {
+        document.body.classList.remove('day');
         document.body.classList.add('night');
       }
     });
-    // Начальная тема - ночь
-    document.body.classList.add('night');
 
-    // Звёздный фон - канвас
-    const canvas = document.getElementById('stars');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-    const starsCount = 150;
-    const stars = [];
-    for (let i = 0; i < starsCount; i++) {
-      stars.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        radius: Math.random() * 1.2 + 0.3,
-        alpha: Math.random(),
-        alphaChange: (Math.random() * 0.02) + 0.005
-      });
-    }
-    function drawStars() {
-      ctx.clearRect(0, 0, width, height);
-      for (let star of stars) {
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-        ctx.fill();
-        star.alpha += star.alphaChange;
-        if (star.alpha >= 1 || star.alpha <= 0.1) star.alphaChange *= -1;
+    // Отправка формы обратной связи (чтобы не перезагружать страницу)
+    async function sendForm(event) {
+      event.preventDefault();
+      const form = event.target;
+      const data = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json'
+          },
+          body: data,
+        });
+
+        if (response.ok) {
+          alert('Спасибо! Ваше сообщение отправлено.');
+          form.reset();
+        } else {
+          alert('Ошибка при отправке. Попробуйте позже.');
+        }
+      } catch (error) {
+        alert('Ошибка сети. Попробуйте позже.');
       }
-      requestAnimationFrame(drawStars);
+
+      return false; // чтобы не перезагружать страницу
     }
-    drawStars();
 
-    // Частицы за курсором
-    document.addEventListener('mousemove', e => {
-      const particle = document.createElement('div');
-      particle.classList.add('particle');
-      particle.style.left = e.clientX + 'px';
-      particle.style.top = e.clientY + 'px';
-      const size = Math.random() * 6 + 4;
-      particle.style.width = size + 'px';
-      particle.style.height = size + 'px';
-      particle.style.background = `hsl(240, 100%, 80%)`;
-      particle.style.opacity = '1';
-      document.body.appendChild(particle);
+    // Голосование
+    const voteForm = document.getElementById('voteForm');
+    const customOptionRadio = document.getElementById('customOptionRadio');
+    const customOptionInput = document.getElementById('customOptionInput');
 
-      requestAnimationFrame(() => {
-        particle.style.transform = `translateY(-40px) scale(0)`;
-        particle.style.opacity = '0';
-      });
-      setTimeout(() => {
-        particle.remove();
-      }, 1000);
+    customOptionRadio.addEventListener('change', () => {
+      customOptionInput.disabled = !customOptionRadio.checked;
+      if (!customOptionRadio.checked) {
+        customOptionInput.value = '';
+      }
+    });
+
+    voteForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const email = voteForm.email.value.trim();
+      let voteValue = voteForm.vote.value;
+
+      if (voteValue === 'Свой вариант') {
+        voteValue = customOptionInput.value.trim();
+        if (!voteValue) {
+          alert('Пожалуйста, введите свой вариант.');
+          return;
+        }
+      }
+
+      // Здесь отправка голоса на сервер или просто уведомление
+      alert(`Спасибо за голос! Вы выбрали: ${voteValue}`);
+
+      voteForm.reset();
+      customOptionInput.disabled = true;
     });
   </script>
 </body>
