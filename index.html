@@ -72,6 +72,10 @@
       z-index: 10;
       will-change: transform;
       transition: transform 0.2s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
     }
     header::before {
       content: '';
@@ -106,6 +110,22 @@
     h1 {
       font-size: 3em;
       margin: 0;
+    }
+
+    /* Анимация логотипа */
+    #logo {
+      width: 120px;
+      border-radius: 20px;
+      filter: drop-shadow(0 0 10px #8f94fb);
+      animation: logoAnim 8s infinite ease-in-out;
+      cursor: default;
+      user-select: none;
+    }
+    @keyframes logoAnim {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.05) rotate(5deg); }
+      50% { transform: scale(1) rotate(0deg); }
+      75% { transform: scale(1.05) rotate(-5deg); }
     }
 
     /* Секции */
@@ -168,36 +188,60 @@
       transition: opacity 1s ease-out, transform 1s ease-out;
     }
 
-    /* Стили для формы */
-    form {
+    /* FAQ стили */
+    details.faq-item {
+      margin-bottom: 15px;
+      background: #222;
+      border-radius: 8px;
+      padding: 10px 15px;
+      box-shadow: 0 0 8px rgba(143, 148, 251, 0.4);
+    }
+    details.faq-item summary {
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #8f94fb;
+      outline: none;
+    }
+    details.faq-item p {
+      margin-top: 8px;
+      color: #ccc;
+      line-height: 1.4em;
+    }
+
+    /* Голосование форма */
+    #feature-vote form {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
-    input, textarea, button {
-      padding: 12px;
+    #feature-vote input[type="email"],
+    #feature-vote textarea {
+      padding: 10px;
       border-radius: 6px;
       border: none;
       font-size: 1em;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    input, textarea {
-      background: #222;
-      color: #eee;
       resize: vertical;
     }
-    input::placeholder, textarea::placeholder {
-      color: #999;
+    #feature-vote textarea {
+      min-height: 80px;
     }
-    button {
+    #feature-vote button {
       background: #8f94fb;
       color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 1.1em;
       cursor: pointer;
-      font-weight: 700;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s ease;
     }
-    button:hover {
+    #feature-vote button:hover {
       background: #6b6ffb;
+    }
+    #voteMessage {
+      min-height: 1.4em;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -210,6 +254,7 @@
   <canvas id="stars"></canvas>
 
   <header>
+    <img id="logo" src="saf.png" alt="SAF Логотип" />
     <h1>SAF - Multiplayer Sandbox Survival Game</h1>
     <p>Пиксельная мультиплеерная игра про выживание на острове с друзьями</p>
   </header>
@@ -251,39 +296,45 @@
     </div>
   </div>
 
-  <!-- Добавляем секцию с FAQ и формой -->
+  <!-- FAQ -->
   <div class="section">
     <h2>Часто задаваемые вопросы</h2>
-    <details>
+    <details class="faq-item">
       <summary>Как скачать игру?</summary>
-      <p>Нажмите на кнопку "Скачать игру" в разделе "Ссылки" выше.</p>
+      <p>Нажмите на кнопку "Скачать игру" в разделе "Ссылки".</p>
     </details>
-    <details>
+    <details class="faq-item">
       <summary>На каких платформах работает SAF?</summary>
       <p>Игра работает на Windows. В будущем появится поддержка других платформ.</p>
     </details>
-    <details>
+    <details class="faq-item">
       <summary>Можно ли играть с друзьями?</summary>
       <p>Да! SAF — это мультиплеерная игра, вы можете подключаться к серверам или создавать свои.</p>
     </details>
-    <details>
+    <details class="faq-item">
       <summary>Будет ли игра обновляться?</summary>
       <p>Да. Планируются регулярные апдейты с новыми фичами и улучшениями.</p>
     </details>
-    <details>
+    <details class="faq-item">
       <summary>Есть ли донат?</summary>
       <p>Нет. Игра бесплатная и без Pay-to-Win.</p>
     </details>
   </div>
 
-  <div class="section">
-    <h2>Связаться с нами</h2>
-    <form action="https://formsubmit.co/safmultiplayergame@gmail.com" method="POST">
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="text" name="name" placeholder="Ваше имя" required />
-      <input type="email" name="email" placeholder="Ваша почта" required />
-      <textarea name="message" rows="5" placeholder="Ваше сообщение" required></textarea>
-      <button type="submit">Отправить</button>
+  <!-- Голосование за новую функцию -->
+  <div class="section" id="feature-vote">
+    <h2>Голосуй за следующую функцию!</h2>
+    <p>Выбери, что добавить в следующем обновлении. Для выбора введи свою почту.</p>
+    <form id="voteForm">
+      <input type="email" id="emailInput" name="email" placeholder="Ваша почта" required />
+      <div>
+        <label><input type="radio" name="feature" value="Моды" required /> Моды</label><br />
+        <label><input type="radio" name="feature" value="Животные" /> Животные</label><br />
+        <label><input type="radio" name="feature" value="Свой вариант" /> Свой вариант</label>
+      </div>
+      <textarea id="customFeature" name="customFeature" placeholder="Опишите ваш вариант" style="display:none;"></textarea>
+      <button type="submit">Отправить голос</button>
+      <p id="voteMessage"></p>
     </form>
   </div>
 
@@ -303,6 +354,7 @@
     let width, height;
     const stars = [];
     const STAR_COUNT = 300;
+
     function Star() {
       this.x = Math.random() * width;
       this.y = Math.random() * height;
@@ -352,7 +404,7 @@
     init();
     animate();
 
-    // Частицы за курсором — исправлено
+    // Частицы за курсором
     window.addEventListener('mousemove', e => {
       const particle = document.createElement('div');
       particle.classList.add('particle');
@@ -384,6 +436,79 @@
       });
       document.querySelectorAll('img.screenshot').forEach((img, i) => {
         img.style.transform = `translateY(${scrollY * 0.2 * (i+1)}px)`;
+      });
+    });
+
+    // Голосование — показать/скрыть поле "Свой вариант"
+    const voteForm = document.getElementById('voteForm');
+    const featureRadios = voteForm.elements['feature'];
+    const customFeature = document.getElementById('customFeature');
+    const voteMessage = document.getElementById('voteMessage');
+
+    function toggleCustomFeature() {
+      let selected = Array.from(featureRadios).find(r => r.checked);
+      if (selected && selected.value === 'Свой вариант') {
+        customFeature.style.display = 'block';
+        customFeature.required = true;
+      } else {
+        customFeature.style.display = 'none';
+        customFeature.required = false;
+      }
+    }
+
+    Array.from(featureRadios).forEach(radio => {
+      radio.addEventListener('change', toggleCustomFeature);
+    });
+
+    voteForm.addEventListener('submit', e => {
+      e.preventDefault();
+      voteMessage.textContent = '';
+      voteMessage.style.color = '#8f94fb';
+
+      const email = voteForm.email.value.trim();
+      const feature = voteForm.feature.value;
+      const customText = customFeature.value.trim();
+
+      if (!email || !feature) {
+        voteMessage.style.color = 'red';
+        voteMessage.textContent = 'Пожалуйста, заполните все обязательные поля.';
+        return;
+      }
+
+      // Формируем тело письма
+      let body = `Голос за следующую функцию:\n- Функция: ${feature}`;
+      if (feature === 'Свой вариант') {
+        body += `\n- Описание: ${customText}`;
+      }
+      body += `\n\nПочта голосующего: ${email}`;
+
+      // Отправляем письмо через FormSubmit API (fetch, без перезагрузки)
+      fetch('https://formsubmit.co/ajax/safmultiplayergame@gmail.com', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          feature: feature,
+          customFeature: customText,
+          _subject: "Голос с сайта SAF",
+          _captcha: 'false',
+          message: body
+        })
+      }).then(response => {
+        if (response.ok) {
+          voteMessage.textContent = 'Спасибо за ваш голос!';
+          voteForm.reset();
+          customFeature.style.display = 'none';
+        } else {
+          voteMessage.style.color = 'red';
+          voteMessage.textContent = 'Ошибка при отправке. Попробуйте позже.';
+        }
+      }).catch(() => {
+        voteMessage.style.color = 'red';
+        voteMessage.textContent = 'Ошибка при отправке. Попробуйте позже.';
       });
     });
   </script>
