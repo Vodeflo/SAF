@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Моя игра</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0e0e0e;
+      color: #f5f5f5;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 60px 20px;
+      text-align: center;
+      background: linear-gradient(120deg, #4e54c8, #8f94fb);
+      animation: fadeIn 1s ease-out;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 3em;
+    }
+
+    .section {
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: auto;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeUp 1s ease forwards;
+    }
+
+    .section:nth-child(odd) {
+      background-color: #1a1a1a;
+    }
+
+    img.screenshot {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+      margin: 20px 0;
+    }
+
+    .links a {
+      color: #8f94fb;
+      text-decoration: none;
+      margin-right: 15px;
+      transition: 0.3s;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Моя игра: Выживание на острове</h1>
+    <p>Пиксельная мультиплеерная игра про выживание</p>
+  </header>
+
+  <div class="section" style="animation-delay: 0.5s;">
+    <h2>О игре</h2>
+    <p>
+      Это 2D игра про выживание на острове с другими игроками: строй домики, ешь ягодки, плавай на лодке, сражайся или дружи с другими!
+    </p>
+    <img src="screenshot1.png" class="screenshot" alt="Скриншот 1" />
+  </div>
+
+  <div class="section" style="animation-delay: 1s;">
+    <h2>Особенности</h2>
+    <ul>
+      <li>🏝️ Случайные острова</li>
+      <li>🛶 Путешествия по воде</li>
+      <li>🤝 Онлайн мультиплеер</li>
+      <li>🔫 Специальный шутер-режим</li>
+    </ul>
+    <img src="screenshot2.png" class="screenshot" alt="Скриншот 2" />
+  </div>
+
+  <div class="section" style="animation-delay: 1.5s;">
+    <h2>Ссылки</h2>
+    <div class="links">
+      <a href="#">Скачать игру</a>
+      <a href="#">Discord сервер</a>
+      <a href="#">GitHub проекта</a>
+    </div>
+  </div>
+</body>
+</html>
