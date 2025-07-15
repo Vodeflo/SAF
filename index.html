@@ -13,6 +13,17 @@
       font-family: 'Segoe UI', sans-serif;
       overflow-x: hidden;
       position: relative;
+      transition: background 2s ease, color 2s ease;
+    }
+
+    /* Ночной режим (ночь - темнее с лунным освещением) */
+    body.night {
+      background: linear-gradient(to bottom, #0a0a1a, #000014);
+      color: #ccddee;
+    }
+    body.night header {
+      background: linear-gradient(135deg, #1a1a40, #3a3a70);
+      box-shadow: 0 4px 20px rgba(58, 58, 112, 0.8);
     }
 
     /* Прелоадер */
@@ -71,11 +82,7 @@
       overflow: hidden;
       z-index: 10;
       will-change: transform;
-      transition: transform 0.2s ease-out;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
+      transition: transform 0.2s ease-out, background 2s ease;
     }
     header::before {
       content: '';
@@ -112,22 +119,6 @@
       margin: 0;
     }
 
-    /* Анимация логотипа */
-    #logo {
-      width: 120px;
-      border-radius: 20px;
-      filter: drop-shadow(0 0 10px #8f94fb);
-      animation: logoAnim 8s infinite ease-in-out;
-      cursor: default;
-      user-select: none;
-    }
-    @keyframes logoAnim {
-      0%, 100% { transform: scale(1) rotate(0deg); }
-      25% { transform: scale(1.05) rotate(5deg); }
-      50% { transform: scale(1) rotate(0deg); }
-      75% { transform: scale(1.05) rotate(-5deg); }
-    }
-
     /* Секции */
     .section {
       padding: 40px 20px;
@@ -136,6 +127,10 @@
       background: #1a1a1a;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+      transition: background 2s ease;
+    }
+    body.night .section {
+      background: #12122a;
     }
     .section:nth-child(odd) {
       background-color: #121212;
@@ -188,60 +183,65 @@
       transition: opacity 1s ease-out, transform 1s ease-out;
     }
 
+    /* Луна в правом верхнем углу */
+    #moon {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #f0f0f5, #222244);
+      box-shadow:
+        inset 10px 10px 15px rgba(255, 255, 255, 0.7),
+        0 0 30px 5px rgba(200, 220, 255, 0.7);
+      filter: drop-shadow(0 0 10px #aaddff);
+      opacity: 0;
+      transition: opacity 2s ease;
+      pointer-events: none;
+      z-index: 20;
+    }
+    body.night #moon {
+      opacity: 1;
+    }
+
     /* FAQ стили */
     details.faq-item {
       margin-bottom: 15px;
-      background: #222;
+      background: #222244;
       border-radius: 8px;
       padding: 10px 15px;
-      box-shadow: 0 0 8px rgba(143, 148, 251, 0.4);
+      box-shadow: 0 0 8px rgba(50, 50, 100, 0.5);
+      transition: background 0.3s ease;
+    }
+    details.faq-item[open] {
+      background: #444477;
     }
     details.faq-item summary {
       cursor: pointer;
       font-weight: bold;
       font-size: 1.1em;
-      color: #8f94fb;
+      list-style: none;
       outline: none;
+      user-select: none;
+    }
+    details.faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+    details.faq-item summary::before {
+      content: "▶";
+      display: inline-block;
+      margin-right: 10px;
+      transition: transform 0.3s ease;
+      transform-origin: center;
+    }
+    details.faq-item[open] summary::before {
+      transform: rotate(90deg);
     }
     details.faq-item p {
-      margin-top: 8px;
-      color: #ccc;
+      margin: 10px 0 0 20px;
+      color: #ccddee;
       line-height: 1.4em;
-    }
-
-    /* Голосование форма */
-    #feature-vote form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    #feature-vote input[type="email"],
-    #feature-vote textarea {
-      padding: 10px;
-      border-radius: 6px;
-      border: none;
-      font-size: 1em;
-      resize: vertical;
-    }
-    #feature-vote textarea {
-      min-height: 80px;
-    }
-    #feature-vote button {
-      background: #8f94fb;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-size: 1.1em;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    #feature-vote button:hover {
-      background: #6b6ffb;
-    }
-    #voteMessage {
-      min-height: 1.4em;
-      font-weight: 600;
     }
   </style>
 </head>
@@ -253,8 +253,10 @@
   <!-- Звёздный фон -->
   <canvas id="stars"></canvas>
 
+  <!-- Луна -->
+  <div id="moon"></div>
+
   <header>
-    <img id="logo" src="saf.png" alt="SAF Логотип" />
     <h1>SAF - Multiplayer Sandbox Survival Game</h1>
     <p>Пиксельная мультиплеерная игра про выживание на острове с друзьями</p>
   </header>
@@ -279,25 +281,6 @@
   </div>
 
   <div class="section">
-    <h2>Ссылки</h2>
-    <div class="links">
-      <a href="https://vodeflo.itch.io/saf" target="_blank" rel="noopener noreferrer">
-        <img src="Itchio.png" alt="Itch.io" class="icon" />
-        Скачать игру
-      </a>
-      <a href="https://discord.gg/QKehemHmP7" target="_blank" rel="noopener noreferrer">
-        <img src="Discord.png" alt="Discord" class="icon" />
-        Discord сервер
-      </a>
-      <a href="https://t.me/+KhWkvXTfP0JmNTc0" target="_blank" rel="noopener noreferrer">
-        <img src="Telegram.png" alt="Telegram" class="icon" />
-        Telegram канал
-      </a>
-    </div>
-  </div>
-
-  <!-- FAQ -->
-  <div class="section">
     <h2>Часто задаваемые вопросы</h2>
     <details class="faq-item">
       <summary>Как скачать игру?</summary>
@@ -321,20 +304,31 @@
     </details>
   </div>
 
-  <!-- Голосование за новую функцию -->
-  <div class="section" id="feature-vote">
-    <h2>Голосуй за следующую функцию!</h2>
-    <p>Выбери, что добавить в одном из следущих обновлений. Для выбора введи свою почту.</p>
-    <form id="voteForm">
-      <input type="email" id="emailInput" name="email" placeholder="Ваша почта" required />
-      <div>
-        <label><input type="radio" name="feature" value="Моды" required /> Моды</label><br />
-        <label><input type="radio" name="feature" value="Животные" /> Животные</label><br />
-        <label><input type="radio" name="feature" value="Свой вариант" /> Свой вариант</label>
-      </div>
-      <textarea id="customFeature" name="customFeature" placeholder="Опишите ваш вариант" style="display:none;"></textarea>
-      <button type="submit">Отправить голос</button>
-      <p id="voteMessage"></p>
+  <div class="section">
+    <h2>Ссылки</h2>
+    <div class="links">
+      <a href="https://vodeflo.itch.io/saf" target="_blank" rel="noopener noreferrer">
+        <img src="Itchio.png" alt="Itch.io" class="icon" />
+        Скачать игру
+      </a>
+      <a href="https://discord.gg/QKehemHmP7" target="_blank" rel="noopener noreferrer">
+        <img src="Discord.png" alt="Discord" class="icon" />
+        Discord сервер
+      </a>
+      <a href="https://t.me/+KhWkvXTfP0JmNTc0" target="_blank" rel="noopener noreferrer">
+        <img src="Telegram.png" alt="Telegram" class="icon" />
+        Telegram канал
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Связаться с нами</h2>
+    <form action="https://formsubmit.co/safmultiplayergame@gmail.com" method="POST" target="_blank" onsubmit="return sendForm(event)">
+      <input type="text" name="name" placeholder="Ваше имя" required />
+      <input type="email" name="email" placeholder="Ваша почта" required />
+      <textarea name="message" rows="5" placeholder="Ваше сообщение" required></textarea>
+      <button type="submit">Отправить</button>
     </form>
   </div>
 
@@ -439,78 +433,46 @@
       });
     });
 
-    // Голосование — показать/скрыть поле "Свой вариант"
-    const voteForm = document.getElementById('voteForm');
-    const featureRadios = voteForm.elements['feature'];
-    const customFeature = document.getElementById('customFeature');
-    const voteMessage = document.getElementById('voteMessage');
-
-    function toggleCustomFeature() {
-      let selected = Array.from(featureRadios).find(r => r.checked);
-      if (selected && selected.value === 'Свой вариант') {
-        customFeature.style.display = 'block';
-        customFeature.required = true;
+    // Автоматический режим день/ночь по времени суток
+    function setDayNightMode() {
+      const hour = new Date().getHours();
+      if (hour >= 20 || hour < 6) {
+        document.body.classList.add('night');
       } else {
-        customFeature.style.display = 'none';
-        customFeature.required = false;
+        document.body.classList.remove('night');
       }
     }
+    setDayNightMode();
+    // Обновлять каждые 10 минут
+    setInterval(setDayNightMode, 600000);
 
-    Array.from(featureRadios).forEach(radio => {
-      radio.addEventListener('change', toggleCustomFeature);
-    });
+    // Отправка формы через fetch (чтобы не перекидывало и не обновляло страницу)
+    async function sendForm(event) {
+      event.preventDefault();
+      const form = event.target;
+      const data = new FormData(form);
 
-    voteForm.addEventListener('submit', e => {
-      e.preventDefault();
-      voteMessage.textContent = '';
-      voteMessage.style.color = '#8f94fb';
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json'
+          },
+          body: data,
+        });
 
-      const email = voteForm.email.value.trim();
-      const feature = voteForm.feature.value;
-      const customText = customFeature.value.trim();
-
-      if (!email || !feature) {
-        voteMessage.style.color = 'red';
-        voteMessage.textContent = 'Пожалуйста, заполните все обязательные поля.';
-        return;
-      }
-
-      // Формируем тело письма
-      let body = `Голос за следующую функцию:\n- Функция: ${feature}`;
-      if (feature === 'Свой вариант') {
-        body += `\n- Описание: ${customText}`;
-      }
-      body += `\n\nПочта голосующего: ${email}`;
-
-      // Отправляем письмо через FormSubmit API (fetch, без перезагрузки)
-      fetch('https://formsubmit.co/ajax/safmultiplayergame@gmail.com', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          email: email,
-          feature: feature,
-          customFeature: customText,
-          _subject: "Голос с сайта SAF",
-          _captcha: 'false',
-          message: body
-        })
-      }).then(response => {
         if (response.ok) {
-          voteMessage.textContent = 'Спасибо за ваш голос!';
-          voteForm.reset();
-          customFeature.style.display = 'none';
+          alert('Спасибо! Ваше сообщение отправлено.');
+          form.reset();
         } else {
-          voteMessage.style.color = 'red';
-          voteMessage.textContent = 'Ошибка при отправке. Попробуйте позже.';
+          alert('Ошибка при отправке. Попробуйте позже.');
         }
-      }).catch(() => {
-        voteMessage.style.color = 'red';
-        voteMessage.textContent = 'Ошибка при отправке. Попробуйте позже.';
-      });
-    });
+      } catch (error) {
+        alert('Ошибка сети. Попробуйте позже.');
+      }
+
+      return false; // чтобы не перезагружать страницу
+    }
   </script>
 </body>
 </html>
