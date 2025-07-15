@@ -2,47 +2,35 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SAF - Multiplayer Game</title>
+  <title>SAF — Космический фон со звездами</title>
   <style>
-    /* Сброс и базовые стили */
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
     html, body {
-      height: 100%;
+      margin: 0; padding: 0; height: 100%; width: 100%;
       background: #0e0e0e;
-      color: #f5f5f5;
+      overflow: hidden;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      overflow-x: hidden;
-      position: relative;
+      color: #f5f5f5;
     }
-
-    /* Канвас фон */
-    #starfield {
+    canvas {
       position: fixed;
       top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       z-index: -1;
       background: #0e0e0e;
       display: block;
     }
-
     header {
+      position: relative;
       padding: 60px 20px;
       text-align: center;
       background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
-      animation: fadeIn 1.2s ease-out;
-      box-shadow: 0 4px 20px rgba(143, 148, 251, 0.5);
       border-bottom-left-radius: 30px;
       border-bottom-right-radius: 30px;
-      color: #fff;
-      position: relative;
-      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(143, 148, 251, 0.5);
+      color: white;
       z-index: 1;
+      overflow: hidden;
     }
-
     header::before {
       content: '';
       position: absolute;
@@ -50,7 +38,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15), transparent 70%);
+      background: radial-gradient(circle at center, rgba(255,255,255,0.15), transparent 70%);
       animation: pulse 6s ease-in-out infinite;
       pointer-events: none;
       border-radius: 50%;
@@ -58,12 +46,11 @@
       mix-blend-mode: screen;
       z-index: 0;
     }
-
     header h1, header p {
       position: relative;
       z-index: 1;
+      margin: 0;
     }
-
     @keyframes pulse {
       0%, 100% {
         transform: scale(1);
@@ -74,94 +61,64 @@
         opacity: 0.3;
       }
     }
-
-    h1 {
-      margin: 0;
-      font-size: 3em;
-    }
-
     .section {
       padding: 40px 20px;
       max-width: 900px;
-      margin: auto;
-      opacity: 0;
-      transform: translateY(40px);
-      animation: fadeUp 1s ease forwards;
-      position: relative;
-      z-index: 1;
-      background-color: #1a1a1a;
+      margin: 40px auto;
+      background: #1a1a1a;
       border-radius: 12px;
-      margin-bottom: 30px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.7);
     }
-
+    .section:nth-child(odd) {
+      background: #121212;
+    }
     img.screenshot {
       width: 100%;
       border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
       margin: 20px 0;
-      transition: transform 0.2s ease-out;
-      transform-style: preserve-3d;
-      will-change: transform;
-      perspective: 1000px;
-      position: relative;
-      z-index: 1;
+      display: block;
     }
-
     .links a {
       display: inline-flex;
       align-items: center;
       margin-right: 15px;
       color: #8f94fb;
       text-decoration: none;
-      transition: transform 0.3s ease, text-decoration 0.3s ease;
-      position: relative;
-      z-index: 1;
+      transition: transform 0.2s ease, color 0.3s ease;
+      font-weight: 600;
+      font-size: 1.1em;
     }
-
     .links a:hover {
       text-decoration: underline;
+      color: #b3b7ff;
       transform: scale(1.05);
     }
-
     .icon {
       width: 24px;
       height: 24px;
       border-radius: 6px;
-      vertical-align: middle;
       margin-right: 8px;
       object-fit: cover;
-      position: relative;
-      z-index: 1;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      filter: drop-shadow(0 0 2px rgba(143, 148, 251, 0.7));
     }
   </style>
 </head>
 <body>
 
-  <canvas id="starfield"></canvas>
+  <canvas id="stars"></canvas>
 
   <header>
-    <h1>SAF - Multiplayer Sandbox Survival Game</h1>
+    <h1>SAF — Multiplayer Sandbox Survival Game</h1>
     <p>Пиксельная мультиплеерная игра про выживание на острове с друзьями</p>
   </header>
 
   <div class="section" style="animation-delay: 0.5s;">
     <h2>О игре</h2>
     <p>
-      SAF - Это 2д пиксельная инди игра, где ты можешь делать все что захочешь! Хочешь построить домик? Добудь дерево скрафти доски и построй дом! Хочешь поплавать? Сядь на лодку и плыви куда захочешь! И это все в мультиплеере, веселись с друзьями! )
+      SAF — 2D пиксельная инди игра, где ты можешь делать всё, что захочешь! Построй дом, исследуй острова, плавай на лодке и сражайся с друзьями!
     </p>
-    <img src="screenshot1.png" class="screenshot" alt="Скриншот 1" />
+    <img src="screenshot1.png" alt="Скриншот 1" class="screenshot" />
   </div>
 
   <div class="section" style="animation-delay: 1s;">
@@ -170,9 +127,9 @@
       <li>🏝️ Большие острова</li>
       <li>🛶 Путешествия по воде</li>
       <li>🤝 Онлайн мультиплеер</li>
-      <li>⚒️ Много механик</li>
+      <li>⚒️ Множество механик</li>
     </ul>
-    <img src="screenshot2.png" class="screenshot" alt="Скриншот 2" />
+    <img src="screenshot2.png" alt="Скриншот 2" class="screenshot" />
   </div>
 
   <div class="section" style="animation-delay: 1.5s;">
@@ -194,113 +151,69 @@
   </div>
 
   <script>
-    // Поворот скриншотов по курсору
-    const screenshots = document.querySelectorAll('img.screenshot');
-    screenshots.forEach(img => {
-      img.addEventListener('mousemove', e => {
-        const rect = img.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const deltaX = (x - centerX) / centerX;
-        const deltaY = (y - centerY) / centerY;
-
-        const maxRotate = 15;
-
-        const rotateX = deltaY * maxRotate * -1;
-        const rotateY = deltaX * maxRotate;
-
-        img.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-      });
-
-      img.addEventListener('mouseleave', () => {
-        img.style.transform = 'rotateX(0) rotateY(0) scale(1)';
-      });
-    });
-
-    // --------- Анимация космоса на canvas -----------
-
-    const canvas = document.getElementById('starfield');
+    const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
 
     let width, height;
-    let stars = [];
+    const stars = [];
+    const STAR_COUNT = 300;
 
-    const STAR_COUNT = 250;
-
-    // Класс одной звезды
-    class Star {
-      constructor() {
-        this.reset();
-      }
-
-      reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.z = Math.random() * width; // глубина
-        this.size = Math.random() * 1.2 + 0.3;
-        this.speed = 0.02 + Math.random() * 0.02;
-      }
-
-      update() {
-        this.z -= this.speed;
-        if (this.z <= 0) this.reset();
-      }
-
-      draw() {
-        const sx = (this.x - width/2) * (width/this.z) + width/2;
-        const sy = (this.y - height/2) * (width/this.z) + height/2;
-
-        const radius = (1 - this.z / width) * this.size * 2.5;
-        const opacity = 1 - this.z / width;
-
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(255, 255, 255, ${opacity.toFixed(2)})`;
-        ctx.shadowColor = `rgba(255, 255, 255, ${opacity.toFixed(2)})`;
-        ctx.shadowBlur = radius * 2;
-        ctx.arc(sx, sy, radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
+    function Star() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.size = Math.random() * 1.5 + 0.5;
+      this.speed = this.size * 0.1;
+      this.opacity = Math.random();
     }
+    Star.prototype.update = function() {
+      this.x -= this.speed;
+      if (this.x < 0) {
+        this.x = width;
+        this.y = Math.random() * height;
+        this.opacity = Math.random();
+      }
+    };
+    Star.prototype.draw = function() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+      ctx.shadowColor = 'white';
+      ctx.shadowBlur = 6;
+      ctx.fill();
+    };
 
     function init() {
-      resize();
-      stars = [];
-      for(let i = 0; i < STAR_COUNT; i++) {
-        stars.push(new Star());
-      }
-      animate();
-    }
-
-    function resize() {
       width = window.innerWidth;
       height = window.innerHeight;
-
       canvas.width = width * devicePixelRatio;
       canvas.height = height * devicePixelRatio;
       canvas.style.width = width + 'px';
       canvas.style.height = height + 'px';
-
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(devicePixelRatio, devicePixelRatio);
+
+      stars.length = 0;
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push(new Star());
+      }
     }
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
-      for(let star of stars) {
+      for (const star of stars) {
         star.update();
         star.draw();
       }
       requestAnimationFrame(animate);
     }
 
-    window.addEventListener('resize', init);
+    window.addEventListener('resize', () => {
+      init();
+    });
 
     init();
-
+    animate();
   </script>
+
 </body>
 </html>
