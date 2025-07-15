@@ -96,8 +96,48 @@
       transition: 0.3s;
     }
 
-    .links a:hover {
-      text-decoration: underline;
+.links a {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 15px;
+  color: #8f94fb;
+  text-decoration: none;
+  transition: 0.4s;
+  position: relative;
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #6e70f9cc;
+  overflow: hidden;
+}
+
+.links a:hover {
+  color: #d6d8ff;
+  box-shadow:
+    0 0 12px #8f94fb,
+    0 0 20px #8f94fb,
+    0 0 30px #8f94fb;
+  transform: scale(1.05);
+}
+
+.links a::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, #8f94fb55 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.links a:hover::before {
+  opacity: 1;
+}
+
     }
 
     .icon {
